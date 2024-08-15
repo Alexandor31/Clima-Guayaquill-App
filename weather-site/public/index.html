@@ -1,0 +1,1141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es">
+<head>
+<!-- 2024-08-15 Thu 16:39 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Proyecto ICCD332 Arquitectura de Computadores</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Integrantes: Kevin Alexander &amp;&amp; Luis Morocho" />
+<link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Proyecto ICCD332 Arquitectura de Computadores</h1>
+<div id="table-of-contents">
+<h2>&Iacute;ndice</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgdae63e7">1. City Weather APP</a>
+<ul>
+<li><a href="#org203646f">1.1. Estructura del proyecto</a></li>
+<li><a href="#org09a3327">1.2. Formulación del Problema</a></li>
+<li><a href="#org2539384">1.3. Descripción del código</a></li>
+<li><a href="#orgbe258c6">1.4. Script ejecutable sh</a></li>
+<li><a href="#orgdcd0e0f">1.5. Configuración de Crontab</a></li>
+</ul>
+</li>
+<li><a href="#orge333c32">2. Presentación de resultados</a>
+<ul>
+<li><a href="#orgb16dc78">2.1. Muestra Aleatoria de datos</a></li>
+<li><a href="#orgccce12f">2.2. Gráfica Temperatura vs Tiempo</a></li>
+<li><a href="#org55dafa5">2.3. Realice una gráfica de Humedad con respecto al tiempo</a></li>
+<li><a href="#org7f0ef1c">2.4. Grafica de Velocidad del viento vs temperatura</a></li>
+</ul>
+</li>
+<li><a href="#orgdaeb77d">3. Referencias</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgdae63e7" class="outline-2">
+<h2 id="orgdae63e7"><span class="section-number-2">1</span> City Weather APP</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Este es el proyecto de fin de semestre en donde se pretende demostrar
+las destrezas obtenidas durante el transcurso de la asignatura de
+<b><b>Arquitectura de Computadores</b></b>.
+</p>
+
+<ol class="org-ol">
+<li>Conocimientos de sistema operativo Linux</li>
+<li>Conocimientos de Emacs/Jupyter</li>
+<li>Configuración de Entorno para Data Science con Mamba/Anaconda</li>
+<li>Literate Programming</li>
+</ol>
+</div>
+
+<div id="outline-container-org203646f" class="outline-3">
+<h3 id="org203646f"><span class="section-number-3">1.1</span> Estructura del proyecto</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+Ell proyecto se creo en el <i>home</i> del sistema
+operativo i.e. <i>home/alexander/ArquitecturaComputadores</i> Allí se creo la carpeta <i>ProyectoII</i>
+</p>
+<div class="org-src-container">
+<pre class="src src-shell"><span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">cd ..</span>
+<span style="font-weight: bold;">cd</span> /home/alexander/ArquitecturaComputadores/ProyectoII
+<span style="font-weight: bold;">pwd</span>
+
+</pre>
+</div>
+
+<pre class="example">
+/home/alexander/ArquitecturaComputadores/ProyectoII
+</pre>
+
+
+<p>
+El proyecto ha de tener los siguientes archivos y
+subdirectorios. Adaptar los nombres de los archivos según las ciudades
+específicas del grupo.
+</p>
+
+<pre class="example">
+.
+├── Untitled.ipynb
+├── clima-guayaquil-hoy.csv
+├── get-clima.sh
+├── registro.log
+├── script.py
+└── weather-site
+    ├── build-site.el
+    ├── build-site.el~
+    ├── build.sh
+    ├── content
+    │   ├── images
+    │   │   ├── humedad.png
+    │   │   └── temperature.png
+    │   ├── index.html
+    │   ├── index.org
+    │   ├── index.org:Zone.Identifier
+    │   └── index.org~
+    └── public
+        ├── images
+        │   ├── humedad.png
+        │   ├── humedad.png:Zone.Identifier
+        │   ├── temperature.png
+        │   └── temperature.png:Zone.Identifier
+        ├── index.html
+        └── index.html~
+
+5 directories, 20 files
+</pre>
+
+<p>
+Puede usar Emacs para la creación de la estructura de su proyecto
+usando comandos desde el bloque de shell. Recuerde ejecutar el bloque
+con <code>C-c C-c</code>. Para insertar un bloque nuevo utilice <code>C-c C-,</code> o <code>M-x
+org-insert-structure-template</code>. Seleccione la opción <i>s</i> para src y
+adapte el bloque según su código tenga un comandos de shell, código de
+Python o de Java. En este documento <code>.org</code> dispone de varios ejemplos
+funcionales para escribir y presentar el código.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell"><span style="font-weight: bold;">echo</span> <span style="font-style: italic;">'mkdir  ProyectoII </span>
+<span style="font-style: italic;">nano get-clima.sh </span>
+<span style="font-style: italic;">nano registro.log</span>
+<span style="font-style: italic;">chmod +x get-clima.sh</span>
+<span style="font-style: italic;">./get-clima.sh</span>
+<span style="font-style: italic;">crontab -l</span>
+<span style="font-style: italic;">crontab -w</span>
+<span style="font-style: italic;">mkdir weather-site</span>
+<span style="font-style: italic;">nano build-site.el </span>
+<span style="font-style: italic;">mrkdir content public</span>
+<span style="font-style: italic;">./build-site.sh </span>
+<span style="font-style: italic;">'</span>
+</pre>
+</div>
+
+<pre class="example">
+mkdir  ProyectoII 
+nano get-clima.sh 
+nano registro.log
+chmod +x get-clima.sh
+./get-clima.sh
+crontab -l
+crontab -w
+mkdir weather-site
+nano build-site.el 
+mrkdir content public
+./build-site.sh 
+
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org09a3327" class="outline-3">
+<h3 id="org09a3327"><span class="section-number-3">1.2</span> Formulación del Problema</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+Se desea realizar un registro climatológico de una ciudad
+\(\mathcal{C}\). Para esto, escriba un script de Python/Java que permita
+obtener datos climatológicos desde el API de <a href="https://openweathermap.org/current#one">openweathermap</a>. El API
+hace uso de los valores de latitud \(x\) y longitud \(y\) de la ciudad
+\(\mathcal{C}\) para devolver los valores actuales a un tiempo \(t\).
+</p>
+
+<p>
+Los resultados obtenidos de la consulta al API se escriben en un
+archivo <i>clima-&lt;ciudad&gt;-hoy.csv</i>. Cada ejecución del script debe
+almacenar nuevos datos en el archivo. Utilice <b>crontab</b> y sus
+conocimientos de Linux y Programación para obtener datos del API de
+<i>openweathermap</i> con una periodicidad de 15 minutos mediante la
+ejecución de un archivo ejecutable denominado
+<i>get-weather.sh</i>. Obtenga al menos 50 datos. Verifique los
+resultados. Todas las operaciones se realizan en Linux o en el
+WSL. Las etapas del problema se subdividen en:
+</p>
+
+<ol class="org-ol">
+<li>Conformar los grupos de 2 estudiantes y definir la ciudad
+objeto de estudio.</li>
+<li>Crear su API gratuito en <a href="https://openweathermap.org/current#one">openweathermap</a></li>
+<li>Escribir un script en Python/Java que realice la consulta al
+API y escriba los resultados en <i>clima-&lt;ciudad&gt;-hoy.csv</i>. El
+archivo ha de contener toda la información que se obtiene del
+API en columnas. Se debe observar que los datos sobre lluvia
+(rain) y nieve (snow) se dan a veces si existe el fenómeno.</li>
+
+<li><p>
+Desarrollar un ejecutable <i>get-weather.sh</i> para ejecutar el
+programa Python/Java.<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
+</p>
+<div class="org-src-container">
+<pre class="src src-shell"><span style="font-weight: bold;">cd</span> /home/alexander/ArquitecturaComputadores/ProyectoII
+./get-clima.sh  
+</pre>
+</div>
+
+<pre class="example">
+===== Bienvenido a Guayaquil-Clima =====
+</pre></li>
+
+<li>Configurar Crontab para la adquisición de datos. Escriba el
+comando configurado. Respalde la ejecución de crontab en un
+archivo output.log</li>
+<li><p>
+Realizar la presentación del Trabajo utilizando la generación
+del sitio web por medio de Emacs. Para esto es necesario crear
+la carpeta <b><b>weather-site</b></b> dentro del proyecto. Puede ajustar el
+<i>look and feel</i> según sus preferencias. El servidor a usar es
+el <b><b>simple-httpd</b></b> integrado en Emacs que debe ser instalado:
+</p>
+<ul class="org-ul">
+<li>Usando comandos Emacs: <code>M-x package-install</code> presionamos
+enter (i.e. RET) y escribimos el nombre del paquete:
+simple-httpd</li>
+<li>Configurando el archivo init.el</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-elisp">(use-package simple-httpd
+   <span style="font-weight: bold;">:ensure</span> t)
+</pre>
+</div>
+
+<p>
+Instrucciones de sobre la creación del sitio web se tiene en el
+vídeo de instrucciones y en el archivo <a href="https://github.com/LeninGF/EPN-Lectures/blob/main/iccd332ArqComp-2024-A/Tutoriales/Org-Website/Org-Website.org">Org-Website.org</a> en el
+GitHub del curso
+</p></li>
+
+<li>Su código debe estar respaldado en GitHub/BitBucket, la
+dirección será remitida en la contestación de la tarea</li>
+</ol>
+</div>
+</div>
+<div id="outline-container-org2539384" class="outline-3">
+<h3 id="org2539384"><span class="section-number-3">1.3</span> Descripción del código</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+En esta sección se debe detallar segmentos importantes del código
+desarrollado así como la <b><b>estrategia de solución</b></b> adoptada por el
+grupo para resolver el problema. Divida su código en unidades
+funcionales para facilitar su presentación y exposición.
+</p>
+
+<p>
+Lectura del API
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">def</span> <span style="font-weight: bold;">get_weather</span>(lat, lon, api):
+    <span style="font-weight: bold; font-style: italic;">url</span> = f<span style="font-style: italic;">"http://api.openweathermap.org/data/2.5/weather?lat={lat}&amp;lon={lon}&amp;appid={api}&amp;units=metric"</span>
+    <span style="font-weight: bold;">try</span>:
+        <span style="font-weight: bold; font-style: italic;">response</span> = requests.get(url)
+        response.raise_for_status()  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Lanza una excepci&#243;n para c&#243;digos de estado HTTP err&#243;neos</span>
+        <span style="font-weight: bold;">return</span> response.json()
+    <span style="font-weight: bold;">except</span> requests.RequestException <span style="font-weight: bold;">as</span> e:
+        log_message(f<span style="font-style: italic;">"Error fetching weather data: {e}"</span>)
+        <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">None</span>
+</pre>
+</div>
+
+
+<p>
+Convertir <i>Json</i> a <i>Diccionario</i> de Python
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">guayaquil_weather= get_weather(-2.170998,-79.922359,"960b0c601a2c3df27159443a7d1eca75")</span>
+</pre>
+</div>
+
+
+
+<p>
+Guardar el archivo csv
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">def</span> <span style="font-weight: bold;">write2csv</span>(json_response, csv_filename):
+    <span style="font-weight: bold;">if</span> json_response <span style="font-weight: bold;">is</span> <span style="font-weight: bold; text-decoration: underline;">None</span>:
+        <span style="font-weight: bold;">return</span>
+
+    <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Verifica si el archivo existe para escribir los encabezados solo una vez</span>
+    <span style="font-weight: bold; font-style: italic;">file_exists</span> = os.path.isfile(csv_filename)
+
+    <span style="font-weight: bold;">try</span>:
+        <span style="font-weight: bold;">with</span> <span style="font-weight: bold;">open</span>(csv_filename, mode=<span style="font-style: italic;">'a'</span>, newline=<span style="font-style: italic;">''</span>) <span style="font-weight: bold;">as</span> <span style="font-weight: bold;">file</span>:
+            <span style="font-weight: bold; font-style: italic;">writer</span> = csv.writer(<span style="font-weight: bold;">file</span>)
+            <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> file_exists:
+                <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Escribe todos los encabezados en el CSV</span>
+                writer.writerow([
+                    <span style="font-style: italic;">'dt'</span>, <span style="font-style: italic;">'coord_lon'</span>, <span style="font-style: italic;">'coord_lat'</span>, <span style="font-style: italic;">'weather_0_id'</span>, <span style="font-style: italic;">'weather_0_main'</span>, <span style="font-style: italic;">'weather_0_description'</span>, 
+                    <span style="font-style: italic;">'weather_0_icon'</span>, <span style="font-style: italic;">'base'</span>, <span style="font-style: italic;">'main_temp'</span>, <span style="font-style: italic;">'main_feels_like'</span>, <span style="font-style: italic;">'main_temp_min'</span>, <span style="font-style: italic;">'main_temp_max'</span>, 
+                    <span style="font-style: italic;">'main_pressure'</span>, <span style="font-style: italic;">'main_humidity'</span>, <span style="font-style: italic;">'main_sea_level'</span>, <span style="font-style: italic;">'main_grnd_level'</span>, <span style="font-style: italic;">'visibility'</span>, <span style="font-style: italic;">'wind_speed'</span>, 
+                    <span style="font-style: italic;">'wind_deg'</span>, <span style="font-style: italic;">'wind_gust'</span>, <span style="font-style: italic;">'clouds_all'</span>, <span style="font-style: italic;">'sys_type'</span>, <span style="font-style: italic;">'sys_id'</span>, <span style="font-style: italic;">'sys_country'</span>, <span style="font-style: italic;">'sys_sunrise'</span>, 
+                    <span style="font-style: italic;">'sys_sunset'</span>, <span style="font-style: italic;">'timezone'</span>, <span style="font-style: italic;">'id'</span>, <span style="font-style: italic;">'name'</span>, <span style="font-style: italic;">'cod'</span>
+                ])
+
+            <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Escribe todos los valores en una fila del CSV</span>
+            writer.writerow([
+                json_response.get(<span style="font-style: italic;">'dt'</span>, <span style="font-style: italic;">''</span>),
+                json_response.get(<span style="font-style: italic;">'coord'</span>, {}).get(<span style="font-style: italic;">'lon'</span>, <span style="font-style: italic;">''</span>),
+                json_response.get(<span style="font-style: italic;">'coord'</span>, {}).get(<span style="font-style: italic;">'lat'</span>, <span style="font-style: italic;">''</span>),
+                json_response.get(<span style="font-style: italic;">'weather'</span>, [{}])[0].get(<span style="font-style: italic;">'id'</span>, <span style="font-style: italic;">''</span>),
+                json_response.get(<span style="font-style: italic;">'weather'</span>, [{}])[0].get(<span style="font-style: italic;">'main'</span>, <span style="font-style: italic;">''</span>),
+                json_response.get(<span style="font-style: italic;">'weather'</span>, [{}])[0].get(<span style="font-style: italic;">'description'</span>, <span style="font-style: italic;">''</span>),
+                json_response.get(<span style="font-style: italic;">'weather'</span>, [{}])[0].get(<span style="font-style: italic;">'icon'</span>, <span style="font-style: italic;">''</span>),
+                json_response.get(<span style="font-style: italic;">'base'</span>, <span style="font-style: italic;">''</span>),
+                json_response.get(<span style="font-style: italic;">'main'</span>, {}).get(<span style="font-style: italic;">'temp'</span>, <span style="font-style: italic;">''</span>),
+                json_response.get(<span style="font-style: italic;">'main'</span>, {}).get(<span style="font-style: italic;">'feels_like'</span>, <span style="font-style: italic;">''</span>),
+                json_response.get(<span style="font-style: italic;">'main'</span>, {}).get(<span style="font-style: italic;">'temp_min'</span>, <span style="font-style: italic;">''</span>),
+                json_response.get(<span style="font-style: italic;">'main'</span>, {}).get(<span style="font-style: italic;">'temp_max'</span>, <span style="font-style: italic;">''</span>),
+                json_response.get(<span style="font-style: italic;">'main'</span>, {}).get(<span style="font-style: italic;">'pressure'</span>, <span style="font-style: italic;">''</span>),
+                json_response.get(<span style="font-style: italic;">'main'</span>, {}).get(<span style="font-style: italic;">'humidity'</span>, <span style="font-style: italic;">''</span>),
+                json_response.get(<span style="font-style: italic;">'main'</span>, {}).get(<span style="font-style: italic;">'sea_level'</span>, <span style="font-style: italic;">''</span>),
+                json_response.get(<span style="font-style: italic;">'main'</span>, {}).get(<span style="font-style: italic;">'grnd_level'</span>, <span style="font-style: italic;">''</span>),
+                json_response.get(<span style="font-style: italic;">'visibility'</span>, <span style="font-style: italic;">''</span>),
+                json_response.get(<span style="font-style: italic;">'wind'</span>, {}).get(<span style="font-style: italic;">'speed'</span>, <span style="font-style: italic;">''</span>),
+                json_response.get(<span style="font-style: italic;">'wind'</span>, {}).get(<span style="font-style: italic;">'deg'</span>, <span style="font-style: italic;">''</span>),
+                json_response.get(<span style="font-style: italic;">'wind'</span>, {}).get(<span style="font-style: italic;">'gust'</span>, <span style="font-style: italic;">''</span>),
+                json_response.get(<span style="font-style: italic;">'clouds'</span>, {}).get(<span style="font-style: italic;">'all'</span>, <span style="font-style: italic;">''</span>),
+                json_response.get(<span style="font-style: italic;">'sys'</span>, {}).get(<span style="font-style: italic;">'type'</span>, <span style="font-style: italic;">''</span>),
+                json_response.get(<span style="font-style: italic;">'sys'</span>, {}).get(<span style="font-style: italic;">'id'</span>, <span style="font-style: italic;">''</span>),
+                json_response.get(<span style="font-style: italic;">'sys'</span>, {}).get(<span style="font-style: italic;">'country'</span>, <span style="font-style: italic;">''</span>),
+                json_response.get(<span style="font-style: italic;">'sys'</span>, {}).get(<span style="font-style: italic;">'sunrise'</span>, <span style="font-style: italic;">''</span>),
+                json_response.get(<span style="font-style: italic;">'sys'</span>, {}).get(<span style="font-style: italic;">'sunset'</span>, <span style="font-style: italic;">''</span>),
+                json_response.get(<span style="font-style: italic;">'timezone'</span>, <span style="font-style: italic;">''</span>),
+                json_response.get(<span style="font-style: italic;">'id'</span>, <span style="font-style: italic;">''</span>),
+                json_response.get(<span style="font-style: italic;">'name'</span>, <span style="font-style: italic;">''</span>),
+                json_response.get(<span style="font-style: italic;">'cod'</span>, <span style="font-style: italic;">''</span>)
+            ])
+
+        log_message(<span style="font-style: italic;">"Datos guardados correctamente"</span>)
+    <span style="font-weight: bold;">except</span> <span style="font-weight: bold; text-decoration: underline;">Exception</span> <span style="font-weight: bold;">as</span> e:
+        log_message(f<span style="font-style: italic;">"Error writing to CSV: {e}"</span>)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgbe258c6" class="outline-3">
+<h3 id="orgbe258c6"><span class="section-number-3">1.4</span> Script ejecutable sh</h3>
+<div class="outline-text-3" id="text-1-4">
+<p>
+Se coloca el contenido del script ejecutable. Recuerde que se debe
+utilizar el entorno de <b><b>anaconda/mamba</b></b> denominado <b><b>iccd332</b></b> para
+la ejecución de Python; independientemente de que tenga una
+instalación nativa de Python
+</p>
+
+<p>
+En el caso de los shell script se puede usar `which sh` para conocer
+la ubicación del ejecutable
+</p>
+<div class="org-src-container">
+<pre class="src src-shell">which sh
+</pre>
+</div>
+
+<pre class="example">
+/usr/bin/sh
+</pre>
+
+
+<p>
+De igual manera se requiere localizar el entorno de mamba <b>iccd332</b>
+que será utilizado
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">which mamba
+</pre>
+</div>
+
+<pre class="example">
+/home/leningfe/miniforge3/condabin/mamba
+</pre>
+
+
+<p>
+Con esto el archivo ejecutable a de tener (adapte el código según las
+condiciones de su máquina):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell"><span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">!/usr/bin/</span><span style="font-weight: bold;">sh</span>
+<span style="font-weight: bold;">source</span> /home/alexander/miniforge3/etc/profile.d/conda.sh
+<span style="font-weight: bold;">eval</span> <span style="font-style: italic;">"$(</span><span style="font-weight: bold;">conda</span><span style="font-style: italic;"> shell.bash hook)"</span>
+conda activate iccd332
+python main.py
+</pre>
+</div>
+
+<p>
+Finalmente convierta en ejecutable como se explicó en clases y laboratorio
+</p>
+<div class="org-src-container">
+<pre class="src src-shell"><span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">!/usr/bin/</span><span style="font-weight: bold;">sh</span>
+<span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">!/bin/bash</span>
+<span style="font-weight: bold;">source</span> /home/alexander/miniforge3/etc/profile.d/conda.sh
+<span style="font-weight: bold;">eval</span> <span style="font-style: italic;">"$(</span><span style="font-weight: bold;">conda</span><span style="font-style: italic;"> shell.bash hook)"</span>
+conda activate iccd332
+python3 /home/alexander/ArquitecturaComputadores/ProyectoII/script.py
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgdcd0e0f" class="outline-3">
+<h3 id="orgdcd0e0f"><span class="section-number-3">1.5</span> Configuración de Crontab</h3>
+<div class="outline-text-3" id="text-1-5">
+<p>
+Se indica la configuración realizada en crontab para la adquisición de datos
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">*/15 * * * * /home/alexander/ArquitecturaComputadores/ProyectoII/get-clima.sh &gt;&gt; /home/alexander/ArquitecturaComputadores/ProyectoII/registro.log 2&gt;&amp;1
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>Recuerde remplazar &lt;City&gt; por el nombre de la ciudad que analice</li>
+<li>Recuerde ajustar el tiempo para potenciar tomar datos nuevos</li>
+<li>Recuerde que <code>2&gt;&amp;1</code> permite guardar en <code>output.log</code> tanto la salida
+del programa como los errores en la ejecución.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-orge333c32" class="outline-2">
+<h2 id="orge333c32"><span class="section-number-2">2</span> Presentación de resultados</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Para la pressentación de resultados se utilizan las librerías de Python:
+</p>
+<ul class="org-ul">
+<li>matplotlib</li>
+<li>pandas</li>
+</ul>
+
+<p>
+Alternativamente como pudo estudiar en el Jupyter Notebook
+<a href="https://github.com/LeninGF/EPN-Lectures/blob/main/iccd332ArqComp-2024-A/Proyectos/CityWeather/CityTemperatureAnalysis.ipynb">CityTemperatureAnalysis.ipynb</a>, existen librerías alternativas que se
+pueden utilizar para presentar los resultados gráficos. En ambos
+casos, para que funcione los siguientes bloques de código, es
+necesario que realice la instalación de los paquetes usando <code>mamba
+install &lt;nombre-paquete&gt;</code>
+</p>
+</div>
+<div id="outline-container-orgb16dc78" class="outline-3">
+<h3 id="orgb16dc78"><span class="section-number-3">2.1</span> Muestra Aleatoria de datos</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+Presentar una muestra de 10 valores aleatorios de los datos obtenidos.
+</p>
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listado de programa 1 </span>Lectura de archivo csv</label><pre class="src src-python"><span style="font-weight: bold;">import</span> os
+<span style="font-weight: bold;">import</span> pandas <span style="font-weight: bold;">as</span> pd
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">lectura del archivo csv obtenido</span>
+<span style="font-weight: bold; font-style: italic;">df</span> = pd.read_csv(<span style="font-style: italic;">'/home/alexander/ArquitecturaComputadores/ProyectoII/clima-guayaquil-hoy.csv'</span>)
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">se imprime la estructura del dataframe en forma de filas x columnas</span>
+<span style="font-weight: bold;">print</span>(df.shape)
+</pre>
+</div>
+
+<p>
+Resultado del número de filas y columnas leídos del archivo csv
+</p>
+<pre class="example">
+(57, 30)
+</pre>
+
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">print</span>(df.columns)
+</pre>
+</div>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listado de programa 2 </span>Despliegue de datos aleatorios</label><pre class="src src-python"><span style="font-weight: bold; font-style: italic;">table1</span> = df.sample(10)
+<span style="font-weight: bold; font-style: italic;">table</span> = [<span style="font-weight: bold;">list</span>(table1)]+[<span style="font-weight: bold; text-decoration: underline;">None</span>]+table1.values.tolist()
+table 
+</pre>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">dt</th>
+<th scope="col" class="org-right">coord<sub>lon</sub></th>
+<th scope="col" class="org-right">coord<sub>lat</sub></th>
+<th scope="col" class="org-right">weather<sub>0</sub><sub>id</sub></th>
+<th scope="col" class="org-left">weather<sub>0</sub><sub>main</sub></th>
+<th scope="col" class="org-left">weather<sub>0</sub><sub>description</sub></th>
+<th scope="col" class="org-right">weather<sub>0</sub><sub>icon</sub></th>
+<th scope="col" class="org-left">base</th>
+<th scope="col" class="org-right">main<sub>temp</sub></th>
+<th scope="col" class="org-right">main<sub>feels</sub><sub>like</sub></th>
+<th scope="col" class="org-right">main<sub>temp</sub><sub>min</sub></th>
+<th scope="col" class="org-right">main<sub>temp</sub><sub>max</sub></th>
+<th scope="col" class="org-right">main<sub>pressure</sub></th>
+<th scope="col" class="org-right">main<sub>humidity</sub></th>
+<th scope="col" class="org-right">main<sub>sea</sub><sub>level</sub></th>
+<th scope="col" class="org-right">main<sub>grnd</sub><sub>level</sub></th>
+<th scope="col" class="org-right">visibility</th>
+<th scope="col" class="org-right">wind<sub>speed</sub></th>
+<th scope="col" class="org-right">wind<sub>deg</sub></th>
+<th scope="col" class="org-right">wind<sub>gust</sub></th>
+<th scope="col" class="org-right">clouds<sub>all</sub></th>
+<th scope="col" class="org-right">sys<sub>type</sub></th>
+<th scope="col" class="org-right">sys<sub>id</sub></th>
+<th scope="col" class="org-left">sys<sub>country</sub></th>
+<th scope="col" class="org-right">sys<sub>sunrise</sub></th>
+<th scope="col" class="org-right">sys<sub>sunset</sub></th>
+<th scope="col" class="org-right">timezone</th>
+<th scope="col" class="org-right">id</th>
+<th scope="col" class="org-left">name</th>
+<th scope="col" class="org-right">cod</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">1723605955.0</td>
+<td class="org-right">-79.9224</td>
+<td class="org-right">-2.171</td>
+<td class="org-right">803</td>
+<td class="org-left">Clouds</td>
+<td class="org-left">broken clouds</td>
+<td class="org-right">04n</td>
+<td class="org-left">stations</td>
+<td class="org-right">23.96</td>
+<td class="org-right">24.45</td>
+<td class="org-right">23.96</td>
+<td class="org-right">23.96</td>
+<td class="org-right">1013</td>
+<td class="org-right">78</td>
+<td class="org-right">1013</td>
+<td class="org-right">1012</td>
+<td class="org-right">10000</td>
+<td class="org-right">5.14</td>
+<td class="org-right">220</td>
+<td class="org-right">nan</td>
+<td class="org-right">75</td>
+<td class="org-right">1</td>
+<td class="org-right">8534</td>
+<td class="org-left">EC</td>
+<td class="org-right">1723548202</td>
+<td class="org-right">1723591545</td>
+<td class="org-right">-18000</td>
+<td class="org-right">3657509</td>
+<td class="org-left">Guayaquil</td>
+<td class="org-right">200</td>
+</tr>
+
+<tr>
+<td class="org-right">1723555802.0</td>
+<td class="org-right">-79.9224</td>
+<td class="org-right">-2.171</td>
+<td class="org-right">803</td>
+<td class="org-left">Clouds</td>
+<td class="org-left">broken clouds</td>
+<td class="org-right">04d</td>
+<td class="org-left">stations</td>
+<td class="org-right">23.96</td>
+<td class="org-right">24.32</td>
+<td class="org-right">23.96</td>
+<td class="org-right">23.96</td>
+<td class="org-right">1014</td>
+<td class="org-right">73</td>
+<td class="org-right">1014</td>
+<td class="org-right">1013</td>
+<td class="org-right">10000</td>
+<td class="org-right">3.6</td>
+<td class="org-right">210</td>
+<td class="org-right">nan</td>
+<td class="org-right">75</td>
+<td class="org-right">1</td>
+<td class="org-right">8534</td>
+<td class="org-left">EC</td>
+<td class="org-right">1723548202</td>
+<td class="org-right">1723591545</td>
+<td class="org-right">-18000</td>
+<td class="org-right">3657509</td>
+<td class="org-left">Guayaquil</td>
+<td class="org-right">200</td>
+</tr>
+
+<tr>
+<td class="org-right">1723552202.0</td>
+<td class="org-right">-79.9224</td>
+<td class="org-right">-2.171</td>
+<td class="org-right">803</td>
+<td class="org-left">Clouds</td>
+<td class="org-left">broken clouds</td>
+<td class="org-right">04d</td>
+<td class="org-left">stations</td>
+<td class="org-right">22.96</td>
+<td class="org-right">23.35</td>
+<td class="org-right">22.96</td>
+<td class="org-right">22.96</td>
+<td class="org-right">1013</td>
+<td class="org-right">78</td>
+<td class="org-right">1013</td>
+<td class="org-right">1012</td>
+<td class="org-right">10000</td>
+<td class="org-right">3.6</td>
+<td class="org-right">220</td>
+<td class="org-right">nan</td>
+<td class="org-right">75</td>
+<td class="org-right">1</td>
+<td class="org-right">8534</td>
+<td class="org-left">EC</td>
+<td class="org-right">1723548202</td>
+<td class="org-right">1723591545</td>
+<td class="org-right">-18000</td>
+<td class="org-right">3657509</td>
+<td class="org-left">Guayaquil</td>
+<td class="org-right">200</td>
+</tr>
+
+<tr>
+<td class="org-right">1723469690.0</td>
+<td class="org-right">-79.9224</td>
+<td class="org-right">-2.171</td>
+<td class="org-right">803</td>
+<td class="org-left">Clouds</td>
+<td class="org-left">broken clouds</td>
+<td class="org-right">04d</td>
+<td class="org-left">stations</td>
+<td class="org-right">23.96</td>
+<td class="org-right">24.21</td>
+<td class="org-right">23.96</td>
+<td class="org-right">23.96</td>
+<td class="org-right">1014</td>
+<td class="org-right">69</td>
+<td class="org-right">1014</td>
+<td class="org-right">1012</td>
+<td class="org-right">10000</td>
+<td class="org-right">3.6</td>
+<td class="org-right">230</td>
+<td class="org-right">nan</td>
+<td class="org-right">75</td>
+<td class="org-right">1</td>
+<td class="org-right">8534</td>
+<td class="org-left">EC</td>
+<td class="org-right">1723461815</td>
+<td class="org-right">1723505152</td>
+<td class="org-right">-18000</td>
+<td class="org-right">3657509</td>
+<td class="org-left">Guayaquil</td>
+<td class="org-right">200</td>
+</tr>
+
+<tr>
+<td class="org-right">1723426203.0</td>
+<td class="org-right">-79.9224</td>
+<td class="org-right">-2.171</td>
+<td class="org-right">802</td>
+<td class="org-left">Clouds</td>
+<td class="org-left">scattered clouds</td>
+<td class="org-right">03n</td>
+<td class="org-left">stations</td>
+<td class="org-right">24.96</td>
+<td class="org-right">25.42</td>
+<td class="org-right">24.96</td>
+<td class="org-right">24.96</td>
+<td class="org-right">1013</td>
+<td class="org-right">73</td>
+<td class="org-right">1013</td>
+<td class="org-right">1012</td>
+<td class="org-right">10000</td>
+<td class="org-right">6.69</td>
+<td class="org-right">210</td>
+<td class="org-right">nan</td>
+<td class="org-right">40</td>
+<td class="org-right">1</td>
+<td class="org-right">8534</td>
+<td class="org-left">EC</td>
+<td class="org-right">1723375427</td>
+<td class="org-right">1723418759</td>
+<td class="org-right">-18000</td>
+<td class="org-right">3657509</td>
+<td class="org-left">Guayaquil</td>
+<td class="org-right">200</td>
+</tr>
+
+<tr>
+<td class="org-right">1723575602.0</td>
+<td class="org-right">-79.9224</td>
+<td class="org-right">-2.171</td>
+<td class="org-right">803</td>
+<td class="org-left">Clouds</td>
+<td class="org-left">broken clouds</td>
+<td class="org-right">04d</td>
+<td class="org-left">stations</td>
+<td class="org-right">26.96</td>
+<td class="org-right">28.4</td>
+<td class="org-right">26.96</td>
+<td class="org-right">26.96</td>
+<td class="org-right">1009</td>
+<td class="org-right">65</td>
+<td class="org-right">1009</td>
+<td class="org-right">1008</td>
+<td class="org-right">10000</td>
+<td class="org-right">2.06</td>
+<td class="org-right">220</td>
+<td class="org-right">nan</td>
+<td class="org-right">75</td>
+<td class="org-right">1</td>
+<td class="org-right">8534</td>
+<td class="org-left">EC</td>
+<td class="org-right">1723548202</td>
+<td class="org-right">1723591545</td>
+<td class="org-right">-18000</td>
+<td class="org-right">3657509</td>
+<td class="org-left">Guayaquil</td>
+<td class="org-right">200</td>
+</tr>
+
+<tr>
+<td class="org-right">1723756063.0</td>
+<td class="org-right">-79.9224</td>
+<td class="org-right">-2.171</td>
+<td class="org-right">801</td>
+<td class="org-left">Clouds</td>
+<td class="org-left">few clouds</td>
+<td class="org-right">02d</td>
+<td class="org-left">stations</td>
+<td class="org-right">30.96</td>
+<td class="org-right">32.75</td>
+<td class="org-right">30.96</td>
+<td class="org-right">30.96</td>
+<td class="org-right">1008</td>
+<td class="org-right">51</td>
+<td class="org-right">1008</td>
+<td class="org-right">1006</td>
+<td class="org-right">10000</td>
+<td class="org-right">4.63</td>
+<td class="org-right">230</td>
+<td class="org-right">nan</td>
+<td class="org-right">20</td>
+<td class="org-right">1</td>
+<td class="org-right">8534</td>
+<td class="org-left">EC</td>
+<td class="org-right">1723720975</td>
+<td class="org-right">1723764329</td>
+<td class="org-right">-18000</td>
+<td class="org-right">3657509</td>
+<td class="org-left">Guayaquil</td>
+<td class="org-right">200</td>
+</tr>
+
+<tr>
+<td class="org-right">1723591801.0</td>
+<td class="org-right">-79.9224</td>
+<td class="org-right">-2.171</td>
+<td class="org-right">803</td>
+<td class="org-left">Clouds</td>
+<td class="org-left">broken clouds</td>
+<td class="org-right">04n</td>
+<td class="org-left">stations</td>
+<td class="org-right">25.96</td>
+<td class="org-right">25.96</td>
+<td class="org-right">25.96</td>
+<td class="org-right">25.96</td>
+<td class="org-right">1011</td>
+<td class="org-right">69</td>
+<td class="org-right">1011</td>
+<td class="org-right">1010</td>
+<td class="org-right">10000</td>
+<td class="org-right">5.14</td>
+<td class="org-right">200</td>
+<td class="org-right">nan</td>
+<td class="org-right">75</td>
+<td class="org-right">1</td>
+<td class="org-right">8534</td>
+<td class="org-left">EC</td>
+<td class="org-right">1723548202</td>
+<td class="org-right">1723591545</td>
+<td class="org-right">-18000</td>
+<td class="org-right">3657509</td>
+<td class="org-left">Guayaquil</td>
+<td class="org-right">200</td>
+</tr>
+
+<tr>
+<td class="org-right">1723589023.0</td>
+<td class="org-right">-79.9224</td>
+<td class="org-right">-2.1681</td>
+<td class="org-right">803</td>
+<td class="org-left">Clouds</td>
+<td class="org-left">broken clouds</td>
+<td class="org-right">04d</td>
+<td class="org-left">stations</td>
+<td class="org-right">25.99</td>
+<td class="org-right">25.99</td>
+<td class="org-right">25.99</td>
+<td class="org-right">25.99</td>
+<td class="org-right">1010</td>
+<td class="org-right">69</td>
+<td class="org-right">1010</td>
+<td class="org-right">1009</td>
+<td class="org-right">10000</td>
+<td class="org-right">4.12</td>
+<td class="org-right">190</td>
+<td class="org-right">nan</td>
+<td class="org-right">75</td>
+<td class="org-right">1</td>
+<td class="org-right">8534</td>
+<td class="org-left">EC</td>
+<td class="org-right">1723548202</td>
+<td class="org-right">1723591545</td>
+<td class="org-right">-18000</td>
+<td class="org-right">3657509</td>
+<td class="org-left">Guayaquil</td>
+<td class="org-right">200</td>
+</tr>
+
+<tr>
+<td class="org-right">1723645566.0</td>
+<td class="org-right">-79.9224</td>
+<td class="org-right">-2.171</td>
+<td class="org-right">803</td>
+<td class="org-left">Clouds</td>
+<td class="org-left">broken clouds</td>
+<td class="org-right">04d</td>
+<td class="org-left">stations</td>
+<td class="org-right">25.96</td>
+<td class="org-right">25.96</td>
+<td class="org-right">25.96</td>
+<td class="org-right">25.96</td>
+<td class="org-right">1014</td>
+<td class="org-right">69</td>
+<td class="org-right">1014</td>
+<td class="org-right">1013</td>
+<td class="org-right">10000</td>
+<td class="org-right">4.12</td>
+<td class="org-right">210</td>
+<td class="org-right">nan</td>
+<td class="org-right">75</td>
+<td class="org-right">1</td>
+<td class="org-right">8534</td>
+<td class="org-left">EC</td>
+<td class="org-right">1723634589</td>
+<td class="org-right">1723677937</td>
+<td class="org-right">-18000</td>
+<td class="org-right">3657509</td>
+<td class="org-left">Guayaquil</td>
+<td class="org-right">200</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+
+<div id="outline-container-orgccce12f" class="outline-3">
+<h3 id="orgccce12f"><span class="section-number-3">2.2</span> Gráfica Temperatura vs Tiempo</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+El siguiente cógido permite hacer la gráfica de la temperatura vs
+tiempo para Org 9.7+. Para saber que versión dispone puede ejecutar
+<code>M-x org-version</code>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">import</span> matplotlib.pyplot <span style="font-weight: bold;">as</span> plt
+<span style="font-weight: bold;">import</span> matplotlib.dates <span style="font-weight: bold;">as</span> mdates
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Define el tama&#241;o de la figura de salida</span>
+<span style="font-weight: bold; font-style: italic;">fig</span> = plt.figure(figsize=(8,6))
+plt.plot(df[<span style="font-style: italic;">'dt'</span>], df[<span style="font-style: italic;">'main_temp'</span>]) <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">dibuja las variables dt y temperatura</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">ajuste para presentacion de fechas en la imagen </span>
+<span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">plt.gca().xaxis.set_major_locator(mdates.DayLocator(interval=2))</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))  </span>
+plt.grid()
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Titulo que obtiene el nombre de la ciudad del DataFrame</span>
+plt.title(f<span style="font-style: italic;">'Main Temp vs Time in GYE'</span>)
+plt.xticks(rotation=40) <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">rotaci&#243;n de las etiquetas 40&#176;</span>
+fig.tight_layout()
+<span style="font-weight: bold; font-style: italic;">fname</span> = <span style="font-style: italic;">'./images/temperature.png'</span>
+plt.savefig(fname)
+fname
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="./images/temperature.png" alt="temperature.png" />
+</p>
+</div>
+
+<p>
+Debido a que el archivo index.org se abre dentro de la carpeta
+<i>content</i>, y en cambio el servidor http de emacs se ejecuta desde la
+carpeta <i>public</i> es necesario copiar el archivo a la ubicación
+equivalente en <code>/public/images</code>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">cp -rfv ./images/* /home/alexander/ArquitecturaComputadores/ProyectoII/weather-site/public/images
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org55dafa5" class="outline-3">
+<h3 id="org55dafa5"><span class="section-number-3">2.3</span> Realice una gráfica de Humedad con respecto al tiempo</h3>
+<div class="outline-text-3" id="text-2-3">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">import</span> matplotlib.pyplot <span style="font-weight: bold;">as</span> plt
+<span style="font-weight: bold;">import</span> matplotlib.dates <span style="font-weight: bold;">as</span> mdates
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Define el tama&#241;o de la figura de salida</span>
+<span style="font-weight: bold; font-style: italic;">fig</span> = plt.figure(figsize=(8,6))
+plt.plot(df[<span style="font-style: italic;">'dt'</span>], df[<span style="font-style: italic;">'main_humidity'</span>]) <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">dibuja las variables dt y temperatura</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">ajuste para presentacion de fechas en la imagen </span>
+<span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">plt.gca().xaxis.set_major_locator(mdates.DayLocator(interval=2))</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))  </span>
+plt.grid()
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Titulo que obtiene el nombre de la ciudad del DataFrame</span>
+plt.title(f<span style="font-style: italic;">'Main Humedad vs Time in GYE'</span>)
+plt.xticks(rotation=40) <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">rotaci&#243;n de las etiquetas 40&#176;</span>
+fig.tight_layout()
+<span style="font-weight: bold; font-style: italic;">fname</span> = <span style="font-style: italic;">'./images/humedad.png'</span>
+plt.savefig(fname)
+fnameimport matplotlib.pyplot <span style="font-weight: bold;">as</span> plt
+<span style="font-weight: bold;">import</span> matplotlib.dates <span style="font-weight: bold;">as</span> mdates
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Define el tama&#241;o de la figura de salida</span>
+<span style="font-weight: bold; font-style: italic;">fig</span> = plt.figure(figsize=(8,6))
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Graficar humedad vs tiempo</span>
+plt.plot(df[<span style="font-style: italic;">'dt'</span>], df[<span style="font-style: italic;">'main_humidity'</span>], label=<span style="font-style: italic;">'Humedad'</span>)
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Ajuste para presentaci&#243;n de fechas en la imagen (descomentar si se necesita)</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">plt.gca().xaxis.set_major_locator(mdates.DayLocator(interval=2))</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))</span>
+
+plt.grid()
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Titulo que obtiene el nombre de la ciudad del DataFrame</span>
+plt.title(f<span style="font-style: italic;">'Humedad vs Tiempo en GYE'</span>)
+plt.xticks(rotation=40)  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Rotaci&#243;n de las etiquetas 40&#176;</span>
+plt.legend()  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Agregar leyenda para la gr&#225;fica</span>
+fig.tight_layout()
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Guardar la figura</span>
+<span style="font-weight: bold; font-style: italic;">fname</span> = <span style="font-style: italic;">'./images/humidity.png'</span>
+plt.savefig(fname)
+fname
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="./images/humidity.png" alt="humidity.png" />
+</p>
+<p><span class="figure-number">Figura 2: </span>Gráfica Temperatura vs Tiempo</p>
+</div>
+
+<p>
+Debido a que el archivo index.org se abre dentro de la carpeta
+<i>content</i>, y en cambio el servidor http de emacs se ejecuta desde la
+carpeta <i>public</i> es necesario copiar el archivo a la ubicación
+equivalente en <code>/public/images</code>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">cp -rfv ./images/* /home/alexander/ArquitecturaComputadores/ProyectoII/weather-site/public/images
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7f0ef1c" class="outline-3">
+<h3 id="org7f0ef1c"><span class="section-number-3">2.4</span> Grafica de Velocidad del viento vs temperatura</h3>
+<div class="outline-text-3" id="text-2-4">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">import</span> matplotlib.pyplot <span style="font-weight: bold;">as</span> plt
+<span style="font-weight: bold;">import</span> matplotlib.dates <span style="font-weight: bold;">as</span> mdates
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Define el tama&#241;o de la figura de salida</span>
+<span style="font-weight: bold; font-style: italic;">fig</span> = plt.figure(figsize=(8,6))
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Graficar velocidad del viento vs tiempo</span>
+plt.plot(df[<span style="font-style: italic;">'dt'</span>], df[<span style="font-style: italic;">'wind_speed'</span>], label=<span style="font-style: italic;">'Velocidad del Viento'</span>)
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Ajuste para presentaci&#243;n de fechas en la imagen (descomentar si se necesita)</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">plt.gca().xaxis.set_major_locator(mdates.DayLocator(interval=2))</span>
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))</span>
+
+plt.grid()
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Titulo que obtiene el nombre de la ciudad del DataFrame</span>
+plt.title(f<span style="font-style: italic;">'Velocidad del Viento vs Tiempo en GYE'</span>)
+plt.xticks(rotation=40)  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Rotaci&#243;n de las etiquetas 40&#176;</span>
+plt.legend()  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Agregar leyenda para la gr&#225;fica</span>
+fig.tight_layout()
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Guardar la figura</span>
+<span style="font-weight: bold; font-style: italic;">fname</span> = <span style="font-style: italic;">'./images/wind_speed.png'</span>
+plt.savefig(fname)
+fname
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="./images/wind_speed.png" alt="wind_speed.png" />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-shell">cp -rfv ./images/* /home/alexander/ArquitecturaComputadores/ProyectoII/weather-site/public/images
+</pre>
+</div>
+
+<p>
+#+begin<sub>src</sub> shell
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgdaeb77d" class="outline-2">
+<h2 id="orgdaeb77d"><span class="section-number-2">3</span> Referencias</h2>
+<div class="outline-text-2" id="text-3">
+<ul class="org-ul">
+<li><a href="https://emacs.stackexchange.com/questions/28715/get-pandas-data-frame-as-a-table-in-org-babel">presentar dataframe como tabla en emacs org</a></li>
+<li><a href="https://orgmode.org/worg/org-contrib/babel/languages/ob-doc-python.html">Python Source Code Blocks in Org Mode</a></li>
+<li><a href="https://systemcrafters.net/publishing-websites-with-org-mode/building-the-site/">Systems Crafters Construir tu sitio web con Modo Emacs Org</a></li>
+<li><a href="https://www.youtube.com/watch?v=AfkrzFodoNw">Vídeo Youtube Build Your Website with Org Mode</a></li>
+</ul>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Nota al pie de p&aacute;gina: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+Recuerde que su máquina ha de disponer de un entorno de
+anaconda/mamba denominado iccd332 en el cual se dispone del interprete
+de Python
+</p></div></div>
+
+
+</div>
+</div></div>
+<div id="postamble" class="status">
+<p class="date">Fecha: 2024-08-07</p>
+<p class="author">Autor: Integrantes: Kevin Alexander &amp;&amp; Luis Morocho</p>
+<p class="date">Created: 2024-08-15 Thu 16:39</p>
+</div>
+</body>
+</html>
